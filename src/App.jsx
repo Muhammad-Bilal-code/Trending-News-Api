@@ -16,7 +16,7 @@ import NavDropdown from 'react-bootstrap/NavDropdown';
 
 function App() {
 
-  const [search,setSeacrh] = useState("")
+  const [searchState,setSeacrhState] = useState("")
   const [data, setData] = useState([])
   useEffect(()=>{
     const trending = () => {
@@ -47,10 +47,31 @@ function App() {
   },[])
 console.log(data)
 
-// const handleSearch = (e)=>{
-    
-// }
-
+const handlesearchTrending = (e) => {
+  e.preventDefault();
+  console.log("test",searchState)
+  const options = {
+    method: 'GET',
+    url: 'https://bing-news-search1.p.rapidapi.com/news',
+    params: {q:searchState,safeSearch: 'Off', textFormat: 'Raw'},
+    headers: {
+      'X-BingApis-SDK': 'true',
+      'X-RapidAPI-Key': '927458ade3msh6163248bdffe610p1b88d0jsnecf53af81a5f',
+      'X-RapidAPI-Host': 'bing-news-search1.p.rapidapi.com'
+    }
+  };
+  
+  axios.request(options).then(function (response) {
+    // console.log(response.data.value)
+    // console.log(response)
+    setData(response.data.value);
+  }).catch(function (error) {
+    console.error(error);
+  });
+  
+  
+}
+// searchTrending();
 
 
   return (
@@ -61,14 +82,15 @@ console.log(data)
       <Navbar bg="light" expand="lg">
       <Container container-fluid className='my-container-navbar'>  
 
-          <Form className="d-flex">
+          <Form className="d-flex" onClick={handlesearchTrending}>
             <Form.Control
               type="search"
               placeholder="Search"
               className="me-2"
               aria-label="Search"
+              onChange={(e)=>{setSeacrhState(e.target.value)}}
             />
-            <Button variant="outline-success" onClick={handleSearch()}>Search</Button>
+            <Button variant="outline-success" type='submit'>Search</Button>
           </Form>
       </Container>
     </Navbar>

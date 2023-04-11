@@ -6,7 +6,22 @@
   height: 40vmin;
   pointer-events: none;
 }
-
+.cards-main {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-around;
+}
+.card {
+  width: 23% !important;
+}
+.card {
+  width: 23% !important;
+  margin: 10px 0;
+}
+.my-container-navbar {
+  display: flex;
+  justify-content: center !important;
+}
 @media (prefers-reduced-motion: no-preference) {
   .App-logo {
     animation: App-logo-spin infinite 20s linear;
