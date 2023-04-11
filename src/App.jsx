@@ -5,11 +5,18 @@ import axios from "axios"
 import 'bootstrap/dist/css/bootstrap.min.css';
 import Card from 'react-bootstrap/Card';
 import ListGroup from 'react-bootstrap/ListGroup';
+import moment from 'moment/moment';
+import Button from 'react-bootstrap/Button';
+import Container from 'react-bootstrap/Container';
+import Form from 'react-bootstrap/Form';
+import Nav from 'react-bootstrap/Nav';
+import Navbar from 'react-bootstrap/Navbar';
+import NavDropdown from 'react-bootstrap/NavDropdown';
 
 
 function App() {
 
-
+  const [search,setSeacrh] = useState("")
   const [data, setData] = useState([])
   useEffect(()=>{
     const trending = () => {
@@ -26,6 +33,7 @@ function App() {
       
       axios.request(options).then(function (response) {
         // console.log(response.data.value)
+        // console.log(response)
         setData(response.data.value);
       }).catch(function (error) {
         console.error(error);
@@ -39,30 +47,66 @@ function App() {
   },[])
 console.log(data)
 
+// const handleSearch = (e)=>{
+    
+// }
+
+
 
   return (
-    <div className="App">
-      <Card style={{ width: '18rem' }}>
-      <Card.Img variant="top" src="holder.js/100px180?text=Image cap" />
+
+<>
+
+      <div className="serch-bar">
+      <Navbar bg="light" expand="lg">
+      <Container container-fluid className='my-container-navbar'>  
+
+          <Form className="d-flex">
+            <Form.Control
+              type="search"
+              placeholder="Search"
+              className="me-2"
+              aria-label="Search"
+            />
+            <Button variant="outline-success" onClick={handleSearch()}>Search</Button>
+          </Form>
+      </Container>
+    </Navbar>
+      </div>
+
+<div className="cards-main">
+
+      {data.map((elm)=>{
+        return (
+          <Card style={{ width: '18rem' }} key={elm.url}>
+      <Card.Img variant="top" src={elm.image.thumbnail.contentUrl} />
       <Card.Body>
-        <Card.Title>Card Title</Card.Title>
+        <Card.Title>{elm.name}</Card.Title>
         <Card.Text>
-          Some quick example text to build on the card title and make up the
-          bulk of the card's content.
+        {elm.description}
         </Card.Text>
       </Card.Body>
       <ListGroup className="list-group-flush">
-        <ListGroup.Item>Cras justo odio</ListGroup.Item>
-        <ListGroup.Item>Dapibus ac facilisis in</ListGroup.Item>
-        <ListGroup.Item>Vestibulum at eros</ListGroup.Item>
+        <ListGroup.Item><strong>Date Posted : </strong>{moment(elm.datePublished).format('MMMM Do YYYY, h:mm:ss a')}</ListGroup.Item>
+        <ListGroup.Item>{moment(elm.datePublished).startOf('hour').fromNow()}</ListGroup.Item>
+        <ListGroup.Item><strong>Provider : </strong>{elm.provider[0].name}</ListGroup.Item>
       </ListGroup>
       <Card.Body>
-        <Card.Link href="#">Card Link</Card.Link>
-        <Card.Link href="#">Another Link</Card.Link>
+        <Card.Link target = "_blank" href={elm.url}>See Details</Card.Link>
+        {/* <Card.Link href="#">Another Link</Card.Link> */}
       </Card.Body>
     </Card>
+        )
+      })}
+
+
+      
       
     </div>
+</>
+
+
+    
   );
 }
 
