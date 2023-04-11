@@ -9,9 +9,9 @@ import moment from 'moment/moment';
 import Button from 'react-bootstrap/Button';
 import Container from 'react-bootstrap/Container';
 import Form from 'react-bootstrap/Form';
-import Nav from 'react-bootstrap/Nav';
+// import Nav from 'react-bootstrap/Nav';
 import Navbar from 'react-bootstrap/Navbar';
-import NavDropdown from 'react-bootstrap/NavDropdown';
+// import NavDropdown from 'react-bootstrap/NavDropdown';
 
 
 function App() {
@@ -50,16 +50,17 @@ console.log(data)
 const handlesearchTrending = (e) => {
   e.preventDefault();
   console.log("test",searchState)
-  const options = {
+  const options = { //api call
     method: 'GET',
-    url: 'https://bing-news-search1.p.rapidapi.com/news',
-    params: {q:searchState,safeSearch: 'Off', textFormat: 'Raw'},
+    url: 'https://bing-news-search1.p.rapidapi.com/news/search',
+    params: {q: searchState, freshness: 'Day', textFormat: 'Raw', safeSearch: 'Off'},
     headers: {
       'X-BingApis-SDK': 'true',
       'X-RapidAPI-Key': '927458ade3msh6163248bdffe610p1b88d0jsnecf53af81a5f',
       'X-RapidAPI-Host': 'bing-news-search1.p.rapidapi.com'
     }
   };
+  
   
   axios.request(options).then(function (response) {
     // console.log(response.data.value)
@@ -98,10 +99,10 @@ const handlesearchTrending = (e) => {
 
 <div className="cards-main">
 
-      {data.map((elm)=>{
+      {(data.length<1)?"Please Search Correct Keyword":data.map((elm)=>{
         return (
           <Card style={{ width: '18rem' }} key={elm.url}>
-      <Card.Img variant="top" src={elm.image.thumbnail.contentUrl} />
+      <Card.Img variant="top" src={(elm?.image?.thumbnail?.contentUrl)?elm?.image?.thumbnail?.contentUrl:`No Thumbnail`} alt='No Thumbnail to Show' />
       <Card.Body>
         <Card.Title>{elm.name}</Card.Title>
         <Card.Text>
